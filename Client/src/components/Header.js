@@ -13,6 +13,11 @@ const Header = () => {
                         Feed
                     </Link>
                 </li>
+                <li className="nav-item">
+                    <Link to="/videos/add" className="nav-link">
+                        New Video
+                    </Link>
+                </li>
             </ul>
         </nav>
     );

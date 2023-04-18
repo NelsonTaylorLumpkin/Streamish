@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Streamish.Models;
 using Streamish.Repositories;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Streamish.Controllers
 {
@@ -9,46 +8,72 @@ namespace Streamish.Controllers
     [ApiController]
     public class UserProfileController : ControllerBase
     {
-
-
-
         private readonly IUserProfileRepository _userProfileRepository;
-        public UserProfileController(IUserProfileRepository userProfileRepository)
+        public UserProfileController(IUserProfileRepository _userProfileRepository) 
         {
-            _userProfileRepository = userProfileRepository;
+            IUserProfileRepository UserProfileRepository = _userProfileRepository;
         }
 
-        // GET: api/<ValuesController>
         [HttpGet]
         public IActionResult Get()
         {
             return Ok(_userProfileRepository.GetAll());
         }
 
-        // GET api/<ValuesController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            var user = _userProfileRepository.GetById(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
         }
 
-        // POST api/<ValuesController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post(UserProfile user)
         {
+            _userProfileRepository.Add(user);
+            return CreatedAtAction("Get", new { id = user.Id }, user);
         }
 
-        // PUT api/<ValuesController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(int id, UserProfile user)
         {
+            if (id != user.Id)
+            {
+                return BadRequest();
+            }
+
+            _userProfileRepository.Update(user);
+            return NoContent();
         }
 
-        // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            _userProfileRepository.Delete(id);
+            return NoContent();
         }
 
+        [HttpGet("{id}/GetUserWithVideosAndComments")]
+        public IActionResult GetUserByIdWithVideosAndComments(int id)
+        {
+            var user = _userProfileRepository.GetUserByIdWithVideosAndComments(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+
+        [HttpGet("GetWithVideos")]
+        public IActionResult GetWithVideos()
+        {
+            var users = _userProfileRepository.GetAllUsersWithVideos();
+            return Ok(users);
+        }
     }
 }
+

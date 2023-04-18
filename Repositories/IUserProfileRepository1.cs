@@ -3,13 +3,15 @@ using System.Collections.Generic;
 
 namespace Streamish.Repositories
 {
-    internal interface IUserProfileRepository
+    public interface IUserProfileRepository
     {
-        public List<UserProfile> GetAll();
-        public UserProfile GetById(int id);
-        public UserProfile GetUserByIdWithVideosAndComments(int id);
-        public void Add(UserProfile user);
-        public void Update(UserProfile user);
-        public void Delete(int Id);
+        void Add(UserProfile user);
+        void Delete(int id);
+        List<UserProfile> GetAll();
+        List<UserProfile> GetAllUsersWithVideos();
+        UserProfile GetById(int id);
+        UserProfile GetUserByIdWithVideosAndComments(int id);
+        void Update(UserProfile user);
     }
 }
+

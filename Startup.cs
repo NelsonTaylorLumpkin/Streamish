@@ -27,6 +27,7 @@ namespace Streamish
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Streamish", Version = "v1" });
             });
             services.AddTransient<IVideoRepository, VideoRepository>();
+            services.AddTransient<IUserProfileRepository, UserProfileRepository>();
 
         }
 

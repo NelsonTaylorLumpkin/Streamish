@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Streamish.Models;
 using Streamish.Utils;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Streamish.Repositories
 {
@@ -125,7 +124,7 @@ namespace Streamish.Repositories
                     DbUtils.AddParameter(cmd, "@Email", userProfile.Email);
                     DbUtils.AddParameter(cmd, "@ImageUrl", userProfile.ImageUrl);
                     DbUtils.AddParameter(cmd, "@DateCreated", userProfile.DateCreated);
-                   
+
 
                     cmd.ExecuteNonQuery();
                 }
@@ -146,7 +145,7 @@ namespace Streamish.Repositories
                     DbUtils.AddParameter(cmd, "@id", id);
                     cmd.ExecuteNonQuery();
                 }
-               
+
             }
         }
         public UserProfile GetUserByIdWithVideosAndComments(int id)

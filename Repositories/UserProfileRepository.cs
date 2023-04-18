@@ -263,9 +263,36 @@ namespace Streamish.Repositories
             }
         }
 
-        public List<UserProfile> GetAllUsersWithVideos(int id)
+        public UserProfile GetByFirebaseUserId(string firebaseUserId)
         {
-            throw new System.NotImplementedException();
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT *
+                                        FROM UserProfile
+                                        WHERE firebaseUserId = @firebaseUserId";
+                    DbUtils.AddParameter(cmd, "@firebaseUserId", firebaseUserId);
+                    using (SqlDataReader reader = cmd.ExecuteReader()) 
+                    {
+                        UserProfile profile = null;
+                        if (reader.Read()) 
+                        {
+                            profile = new UserProfile()
+                            {
+                                Id = DbUtils.GetInt(reader, "Id"),
+                                FirebaseUserId = firebaseUserId,
+                                Name = DbUtils.GetString(reader, "Name"),
+                                Email = DbUtils.GetString(reader, "Email"),
+                                ImageUrl = DbUtils.GetString(reader, "ImageUrl"),
+                                DateCreated = DbUtils.GetDateTime(reader, "DateCreated")
+                            };
+                        }
+                        return profile;
+                    }
+                }
+            }
         }
     }
 }
